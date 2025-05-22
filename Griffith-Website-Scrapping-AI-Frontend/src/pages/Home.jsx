@@ -1,9 +1,12 @@
 // src/pages/Home.jsx
 import { useState } from 'react';
+import Loader from '../components/Loader';
 
 export default function Home() {
   const [question, setQuestion] = useState('');
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,12 +15,23 @@ export default function Home() {
 
     const newMessage = { role: 'user', content: question };
     setMessages([...messages, newMessage]);
+    setLoading(true);
+    setError(null);
 
-    // Pour l'instant, réponse simulée
     setTimeout(() => {
-      const botResponse = { role: 'bot', content: `Voici une réponse simulée à : "${question}"` };
-      setMessages((prev) => [...prev, botResponse]);
+        const hasError = Math.random() < 0.33;
+
+        if (hasError) {
+            setError("Une erreur est survenue lors de la réponse du bot.");
+            setLoading(false);
+            return;
+        }
+        
+        const botResponse = { role: 'bot', content: `Voici une réponse simulée à : "${question}"` };
+        setMessages((prev) => [...prev, botResponse]);
+        setLoading(false); // fin du chargement
     }, 1000);
+
 
     setQuestion('');
   };
@@ -55,6 +69,14 @@ export default function Home() {
             <strong>{msg.role === 'user' ? 'Toi :' : 'Bot :'}</strong> {msg.content}
           </div>
         ))}
+
+        {error && (
+            <div style={{ color: 'red', marginBottom: '1rem' }}>
+                ⚠️ {error}
+            </div>
+        )}
+
+        {loading && <Loader />}
       </div>
     </div>
   );
