@@ -1,23 +1,17 @@
-# Étape 1 : Build avec Node.js
-FROM node:18-alpine AS build
+FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json .
+
 RUN npm install
 
+RUN npm i -g serve
+
 COPY . .
+
 RUN npm run build
 
-# Étape 2 : Serveur statique avec Nginx
-FROM nginx:stable-alpine
+EXPOSE 3000
 
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Supprime la config Nginx par défaut (optionnel mais recommandé)
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Ajoute ta propre config si besoin (ou laisse nginx par défaut si ça fonctionne)
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "serve", "-s", "dist" ]
