@@ -70,6 +70,7 @@ export default function Home() {
           placeholder="Pose ta question..."
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          disabled={loading || botQueue}
           style={{
             width: "100%",
             padding: "0.5rem",
@@ -79,16 +80,20 @@ export default function Home() {
             color: "#fff",
             border: "1px solid #555",
             borderRadius: "4px",
+            opacity: loading || botQueue ? 0.5 : 1,
           }}
         />
         <button
           type="submit"
+          disabled={loading || botQueue}
           style={{
             padding: "0.5rem 1rem",
             background: "#000",
             color: "#fff",
             border: "none",
             borderRadius: "5px",
+            opacity: loading || botQueue ? 0.5 : 1,
+            cursor: loading || botQueue ? "not-allowed" : "pointer",
           }}
         >
           Envoyer

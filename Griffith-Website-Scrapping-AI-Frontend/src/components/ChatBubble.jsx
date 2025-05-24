@@ -8,7 +8,7 @@ export default function ChatBubble({ role, content }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       style={{
-        background: role === 'user' ? '#A7E0E0' : '#9AC8EB',
+        background: role === 'user' ? '#4AA3A2' : '#E38F97',
         padding: '0.75rem',
         borderRadius: '8px',
         marginBottom: '0.5rem',
