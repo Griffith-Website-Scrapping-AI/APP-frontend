@@ -1,19 +1,23 @@
-# Étape 1 : build de l'app
-FROM node:18 AS build
+# Étape 1 : Build avec Node.js
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
+COPY package*.json ./
 RUN npm install
 
 COPY . .
 RUN npm run build
 
-# Étape 2 : serveur de prod (nginx)
-FROM nginx:alpine
+# Étape 2 : Serveur statique avec Nginx
+FROM nginx:stable-alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Supprime la config Nginx par défaut (optionnel mais recommandé)
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Ajoute ta propre config si besoin (ou laisse nginx par défaut si ça fonctionne)
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]
