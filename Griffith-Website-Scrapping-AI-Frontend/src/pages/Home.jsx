@@ -54,52 +54,6 @@ export default function Home() {
         Bienvenue sur le Bot
       </h1>
 
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          width: "100%",
-          maxWidth: "400px",
-          marginBottom: "1rem",
-        }}
-      >
-        <input
-          type="text"
-          placeholder="Pose ta question..."
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          disabled={loading || botQueue}
-          style={{
-            width: "100%",
-            padding: "0.5rem",
-            fontSize: "1rem",
-            marginBottom: "0.5rem",
-            background: "#222",
-            color: "#fff",
-            border: "1px solid #555",
-            borderRadius: "4px",
-            opacity: loading || botQueue ? 0.5 : 1,
-          }}
-        />
-        <button
-          type="submit"
-          disabled={loading || botQueue}
-          style={{
-            padding: "0.5rem 1rem",
-            background: "#000",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            opacity: loading || botQueue ? 0.5 : 1,
-            cursor: loading || botQueue ? "not-allowed" : "pointer",
-          }}
-        >
-          Envoyer
-        </button>
-      </form>
-
       {error && (
         <div style={{ color: "red", marginBottom: "1rem" }}>⚠️ {error}</div>
       )}
@@ -107,6 +61,7 @@ export default function Home() {
       <div
         style={{
           display: "flex",
+          margin: "1rem",
           flexDirection: "column",
           alignItems: "center",
           maxWidth: "600px",
@@ -132,6 +87,52 @@ export default function Home() {
 
         {loading && <Loader />}
       </div>
+
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+          maxWidth: "500px",
+          marginBottom: "1rem",
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Pose ta question..."
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          disabled={loading || botQueue}
+          style={{
+            width: "100%",
+            padding: "0.5rem",
+            margin: "1rem 0rem",
+            fontSize: "1rem",
+            background: "#222",
+            color: "#fff",
+            border: "1px solid #555",
+            borderRadius: "4px",
+            opacity: loading || botQueue ? 0.5 : 1,
+          }}
+        />
+        <button
+          type="submit"
+          disabled={loading || botQueue}
+          style={{
+            padding: "0.5rem 1rem",
+            margin: "1rem 0rem",
+            background: "#000",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            opacity: loading || botQueue ? 0.5 : 1,
+            cursor: loading || botQueue ? "not-allowed" : "pointer",
+          }}
+        >
+          Envoyer
+        </button>
+      </form>
     </div>
   );
 }
