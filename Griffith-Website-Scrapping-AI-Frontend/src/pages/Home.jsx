@@ -10,48 +10,42 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [botQueue, setBotQueue] = useState(null);
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!question.trim()) return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!question.trim()) return;
 
-  // 1) show the user's message immediately
-  setMessages((prev) => [
-    ...prev,
-    { role: "user", content: question },
-  ]);
-  setLoading(true);
-  setError(null);
-  const payload = question;
-  setQuestion("");
+    // 1) show the user's message immediately
+    setMessages((prev) => [...prev, { role: "user", content: question }]);
+    setLoading(true);
+    setError(null);
+    const payload = question;
+    setQuestion("");
 
-  // 2) call the FastAPI backend
-  try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: payload }),
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    // 2) call the FastAPI backend
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: payload }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    // 3) Sanitize the GPT answer:
-    //    • convert all "* " bullets to "• "
-    //    • preserve all "\n" so ChatBubble can render line-breaks
-    const { answer: raw } = await res.json();
-    const cleaned = raw
-      .replace(/\*\s+/g, "• ")
-      .trim();
+      // 3) Sanitize the GPT answer:
+      //    • convert all "* " bullets to "• "
+      //    • preserve all "\n" so ChatBubble can render line-breaks
+      const { answer: raw } = await res.json();
+      const cleaned = raw.replace(/\*\s+/g, "• ").trim();
 
-    // 4) Queue it for the BotTyping animation
-    setBotQueue(cleaned);
-  } catch (err) {
-    console.error("fetch error:", err);
-    setError("Une erreur est survenue lors de la requête au serveur.");
-  } finally {
-    // 5) Always turn off loading
-    setLoading(false);
-  }
-};
-
+      // 4) Queue it for the BotTyping animation
+      setBotQueue(cleaned);
+    } catch (err) {
+      console.error("fetch error:", err);
+      setError("An error has occurred during the request to the server.");
+    } finally {
+      // 5) Always turn off loading
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -69,7 +63,7 @@ const handleSubmit = async (e) => {
       }}
     >
       <h1 style={{ marginBottom: "1rem", textAlign: "center" }}>
-        Bienvenue sur le Bot
+        Welcome to the Bot
       </h1>
 
       {error && (
@@ -118,7 +112,7 @@ const handleSubmit = async (e) => {
       >
         <input
           type="text"
-          placeholder="Pose ta question..."
+          placeholder="Ask your question..."
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           disabled={loading || botQueue}
@@ -148,7 +142,7 @@ const handleSubmit = async (e) => {
             cursor: loading || botQueue ? "not-allowed" : "pointer",
           }}
         >
-          Envoyer
+          Send
         </button>
       </form>
     </div>
