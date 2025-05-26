@@ -10,30 +10,48 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [botQueue, setBotQueue] = useState(null);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!question.trim()) return;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!question.trim()) return;
+  // 1) show the user's message immediately
+  setMessages((prev) => [
+    ...prev,
+    { role: "user", content: question },
+  ]);
+  setLoading(true);
+  setError(null);
+  const payload = question;
+  setQuestion("");
 
-    const newMessage = { role: "user", content: question };
-    setMessages([...messages, newMessage]);
-    setLoading(true);
-    setError(null);
-    setQuestion("");
+  // 2) call the FastAPI backend
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: payload }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    setTimeout(() => {
-      const hasError = Math.random() < 0.1;
-      if (hasError) {
-        setError("An error has occurred in the bot's response.");
-        setLoading(false);
-        return;
-      }
+    // 3) Sanitize the GPT answer:
+    //    • convert all "* " bullets to "• "
+    //    • preserve all "\n" so ChatBubble can render line-breaks
+    const { answer: raw } = await res.json();
+    const cleaned = raw
+      .replace(/\*\s+/g, "• ")
+      .trim();
 
-      const botReply = `Here is a simulated response to : "${question}"`;
-      setBotQueue(botReply);
-      setLoading(false);
-    }, 1000);
-  };
+    // 4) Queue it for the BotTyping animation
+    setBotQueue(cleaned);
+  } catch (err) {
+    console.error("fetch error:", err);
+    setError("Une erreur est survenue lors de la requête au serveur.");
+  } finally {
+    // 5) Always turn off loading
+    setLoading(false);
+  }
+};
+
 
   return (
     <div
