@@ -24,12 +24,12 @@ export default function Home() {
     setTimeout(() => {
       const hasError = Math.random() < 0.1;
       if (hasError) {
-        setError("Une erreur est survenue lors de la réponse du bot.");
+        setError("An error has occurred in the bot's response.");
         setLoading(false);
         return;
       }
 
-      const botReply = `Voici une réponse simulée à : "${question}"`;
+      const botReply = `Here is a simulated response to : "${question}"`;
       setBotQueue(botReply);
       setLoading(false);
     }, 1000);
@@ -51,7 +51,7 @@ export default function Home() {
       }}
     >
       <h1 style={{ marginBottom: "1rem", textAlign: "center" }}>
-        Bienvenue sur le Bot
+        Welcome to the Bot
       </h1>
 
       {error && (
@@ -100,7 +100,7 @@ export default function Home() {
       >
         <input
           type="text"
-          placeholder="Pose ta question..."
+          placeholder="Ask your question..."
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           disabled={loading || botQueue}
@@ -130,7 +130,7 @@ export default function Home() {
             cursor: loading || botQueue ? "not-allowed" : "pointer",
           }}
         >
-          Envoyer
+          Send
         </button>
       </form>
     </div>
