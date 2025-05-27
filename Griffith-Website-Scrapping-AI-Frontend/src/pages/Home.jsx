@@ -10,48 +10,45 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [botQueue, setBotQueue] = useState(null);
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!question.trim()) return;
 
-  // 1) show the user's message immediately
-  setMessages((prev) => [
-    ...prev,
-    { role: "user", content: question },
-  ]);
-  setLoading(true);
-  setError(null);
-  const payload = question;
-  setQuestion("");
+  const API_URL = import.meta.env.DEV
+    ? '/api/chat'
+    : `${import.meta.env.VITE_API_URL}/chat`;
 
-  // 2) call the FastAPI backend
-  try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: payload }),
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!question.trim()) return;
 
-    // 3) Sanitize the GPT answer:
-    //    • convert all "* " bullets to "• "
-    //    • preserve all "\n" so ChatBubble can render line-breaks
-    const { answer: raw } = await res.json();
-    const cleaned = raw
-      .replace(/\*\s+/g, "• ")
-      .trim();
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", content: question },
+    ]);
+    setLoading(true);
+    setError(null);
+    const payload = question;
+    setQuestion("");
 
-    // 4) Queue it for the BotTyping animation
-    setBotQueue(cleaned);
-  } catch (err) {
-    console.error("fetch error:", err);
-    setError("Une erreur est survenue lors de la requête au serveur.");
-  } finally {
-    // 5) Always turn off loading
-    setLoading(false);
-  }
-};
+    try {
+      const res = await fetch("http://localhost:8000/chat", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ question: payload }),
+});
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
+      const { answer: raw } = await res.json();
+      const cleaned = raw
+        .replace(/\*\s+/g, "• ")
+        .trim();
+
+      setBotQueue(cleaned);
+    } catch (err) {
+      console.error("fetch error:", err);
+      setError("Une erreur est survenue lors de la requête au serveur.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
