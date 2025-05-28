@@ -14,7 +14,7 @@ export default function BotTyping({ text, onDone }) {
         clearInterval(interval);
         onDone(); // signal que c’est terminé
       }
-    }, 30); // vitesse d’écriture (en ms)
+    }, 10); // vitesse d’écriture (en ms)
 
     return () => clearInterval(interval);
   }, [text, onDone]);
