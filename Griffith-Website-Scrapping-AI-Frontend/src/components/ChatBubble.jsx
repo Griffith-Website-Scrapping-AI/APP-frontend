@@ -1,12 +1,12 @@
 // src/components/ChatBubble.jsx
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import React from "react";
 
 export default function ChatBubble({ role, content }) {
   const isUser = role === "user";
-  const label   = isUser ? "Toi :" : "Bot :";
-
-  // split into lines so we can indent bullet‐lines
-  const lines = content.split("\n");
+  const label  = isUser ? "Toi :" : "Bot :";
 
   return (
     <motion.div
@@ -27,20 +27,17 @@ export default function ChatBubble({ role, content }) {
         <strong>{label}</strong>
       </div>
 
-      {/* Message body, preserving breaks and indenting bullets */}
-      {lines.map((line, idx) => (
-        <div
-          key={idx}
-          style={{
-            // indent any bullet‐line
-            marginLeft: line.trim().startsWith("•") ? "1rem" : 0,
-            // keep multiple spaces & line breaks intact
-            whiteSpace: "pre-wrap",
-          }}
-        >
-          {line}
-        </div>
-      ))}
+      {/* Markdown renderer */}
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          // On force les puces « • » au lieu de "-" si besoin
+          ul: ({node, ...props}) => <ul style={{ listStyleType: "disc", paddingLeft: "1rem" }} {...props} />,
+          li: ({node, ...props}) => <li style={{ marginBottom: "0.25rem" }} {...props} />,
+        }}
+      >
+        {content}
+      </ReactMarkdown>
     </motion.div>
   );
 }

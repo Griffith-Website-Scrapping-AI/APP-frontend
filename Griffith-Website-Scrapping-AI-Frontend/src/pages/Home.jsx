@@ -38,8 +38,6 @@ export default function Home() {
 
       const { answer: raw } = await res.json();
       const cleaned = raw
-        .replace(/\*\s+/g, "• ")
-        .trim();
 
       setBotQueue(cleaned);
     } catch (err) {
