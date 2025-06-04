@@ -42,7 +42,7 @@ export default function Home() {
       setBotQueue(cleaned);
     } catch (err) {
       console.error("fetch error:", err);
-      setError("Une erreur est survenue lors de la requête au serveur.");
+      setError("An error has occurred during the request to the server.");
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ export default function Home() {
       }}
     >
       <h1 style={{ marginBottom: "1rem", textAlign: "center" }}>
-        Bienvenue sur le Bot
+        Welcome to the Bot
       </h1>
 
       {error && (
@@ -113,7 +113,7 @@ export default function Home() {
       >
         <input
           type="text"
-          placeholder="Pose ta question..."
+          placeholder="Ask your question..."
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           disabled={loading || botQueue}
@@ -143,7 +143,7 @@ export default function Home() {
             cursor: loading || botQueue ? "not-allowed" : "pointer",
           }}
         >
-          Envoyer
+          Send
         </button>
       </form>
     </div>

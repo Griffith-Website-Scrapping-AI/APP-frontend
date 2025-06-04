@@ -12,9 +12,9 @@ export default function BotTyping({ text, onDone }) {
       i++;
       if (i === text.length) {
         clearInterval(interval);
-        onDone(); // signal que c’est terminé
+        onDone(); // signal that it's over
       }
-    }, 10); // vitesse d’écriture (en ms)
+    }, 10); // writing speed (in ms)
 
     return () => clearInterval(interval);
   }, [text, onDone]);

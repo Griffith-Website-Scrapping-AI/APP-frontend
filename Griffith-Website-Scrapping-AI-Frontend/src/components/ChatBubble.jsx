@@ -31,7 +31,7 @@ export default function ChatBubble({ role, content }) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          // On force les puces « • » au lieu de "-" si besoin
+          // Force « • » chips instead of «-» if necessary
           ul: ({node, ...props}) => <ul style={{ listStyleType: "disc", paddingLeft: "1rem" }} {...props} />,
           li: ({node, ...props}) => <li style={{ marginBottom: "0.25rem" }} {...props} />,
         }}

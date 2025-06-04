@@ -1,12 +1,47 @@
-# React + Vite
+# Chatbot Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend of a chatbot application built with React and Vite. It features a clean user interface with conditional styling for user and bot messages, a typing indicator, and disabled input during bot responses. The application is containerized using Docker for easy deployment.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Built with React and Vite for fast development and performance.
+- Modular components (ChatBubble, BotTyping).
+- Responsive and minimal dark-themed UI.
+- Dockerized for consistent builds and deployment.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Run with Docker
+
+To build and run the frontend in a Docker container:
+
+```bash
+docker build -t chatbot-frontend .
+docker run -p 3000:3000 chatbot-frontend
+```
+Once running, open your browser and go to http://localhost:3000
+
+## Project Structure
+
+├── src/
+│   ├── components/
+│   │   ├── BotTyping.jsx
+│   │   ├── ChatBubble.jsx
+│   │   └── Loader.jsx
+│   ├── pages/
+│   │   └── Home.jsx
+│   ├── App.css
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+├── public/
+├── .env
+├── .gitignore
+├── docker-compose.yml
+├── Dockerfile
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── README.md
+└── vite.config.js
